@@ -133,9 +133,17 @@
   <section style="background:#FAF9F6; padding:100px 32px;">
     <div style="max-width:520px; margin:0 auto; background:#fff; border-radius:22px; padding:48px; text-align:center; box-shadow:0 25px 60px rgba(36,52,74,0.12);">
       <h2 style="font-family:'Cormorant Garamond',serif; font-weight:800; font-size:24px; color:#6B2F7A; margin:0 0 28px;">Jetzt kostenfrei anmelden</h2>
-      <input type="text" placeholder="Dein Vorname" style="width:100%; box-sizing:border-box; padding:15px 18px; border-radius:12px; border:1px solid #E4D9C8; font-family:'Lora',serif; font-size:15px; margin-bottom:14px;"/>
-      <input type="email" placeholder="Deine E-Mail-Adresse" style="width:100%; box-sizing:border-box; padding:15px 18px; border-radius:12px; border:1px solid #E4D9C8; font-family:'Lora',serif; font-size:15px; margin-bottom:22px;"/>
-      <button style="width:100%; background:#DD7E2E; color:#fff; border:none; padding:17px; border-radius:999px; font-family:'Montserrat',sans-serif; font-weight:700; font-size:15px; cursor:pointer;">Zum kostenfreien Event anmelden</button>
+      <form method="POST" action="sende-formular.php">
+        <input type="hidden" name="formular" value="Event-Anmeldung: Ein Abend für dein Herz"/>
+        <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none;"/>
+        <input type="text" name="name" required placeholder="Dein Vorname" style="width:100%; box-sizing:border-box; padding:15px 18px; border-radius:12px; border:1px solid #E4D9C8; font-family:'Lora',serif; font-size:15px; margin-bottom:14px;"/>
+        <input type="email" name="email" required placeholder="Deine E-Mail-Adresse" style="width:100%; box-sizing:border-box; padding:15px 18px; border-radius:12px; border:1px solid #E4D9C8; font-family:'Lora',serif; font-size:15px; margin-bottom:18px;"/>
+        <label style="display:flex; align-items:flex-start; gap:10px; text-align:left; font-family:'Montserrat',sans-serif; font-size:13px; line-height:1.5; color:#5C6B7A; margin-bottom:22px;">
+          <input type="checkbox" name="datenschutz" required style="margin-top:2px; flex-shrink:0;"/>
+          <span>Ich habe die <a href="datenschutz.html">Datenschutzerklärung</a> gelesen und stimme der Verarbeitung meiner Daten zur Bearbeitung meiner Anmeldung zu.</span>
+        </label>
+        <button type="submit" style="width:100%; background:#DD7E2E; color:#fff; border:none; padding:17px; border-radius:999px; font-family:'Montserrat',sans-serif; font-weight:700; font-size:15px; cursor:pointer;">Zum kostenfreien Event anmelden</button>
+      </form>
     </div>
   </section>
 
