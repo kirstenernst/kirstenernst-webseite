@@ -29,6 +29,7 @@
     body { margin:0; background:#fff; }
     a { color:#DD7E2E; }
     a:hover { color:#B3611E; }
+    .quiz-option:hover { border-color:#DD7E2E !important; background:#FDF6EE !important; }
   </style>
   <script type="application/ld+json">
   {
@@ -113,7 +114,7 @@
         <p style="font-size:18px; line-height:1.75; color:#5C6B7A; margin:0 0 34px; max-width:480px;">Du hast viel erreicht – und spürst doch eine leise Sehnsucht nach mehr Tiefe, Klarheit und dir selbst. Ich begleite dich zurück zu deiner inneren Wahrheit: mit der Weisheit des Tao und fast 20 Jahren Erfahrung.</p>
         <div style="display:flex; gap:16px; flex-wrap:wrap;">
           <a href="kontakt.html" style="background:#DD7E2E; color:#fff; padding:16px 30px; border-radius:999px; font-family:'Montserrat',sans-serif; font-weight:700; font-size:15px; text-decoration:none;">Kostenfreies Erstgespräch buchen</a>
-          <a href="#" style="background:#fff; color:#6B2F7A; padding:16px 30px; border-radius:999px; font-family:'Montserrat',sans-serif; font-weight:700; font-size:15px; text-decoration:none; border:1px solid rgba(36,52,74,0.15);">Mach den Selbsttest</a>
+          <a href="#selbsttest" style="background:#fff; color:#6B2F7A; padding:16px 30px; border-radius:999px; font-family:'Montserrat',sans-serif; font-weight:700; font-size:15px; text-decoration:none; border:1px solid rgba(36,52,74,0.15);">Mach den Selbsttest</a>
         </div>
       </div>
       <div style="position:relative;">
@@ -145,7 +146,7 @@
     </div>
   </section>
 
-  <section style="background:#FAF9F6; padding:100px 32px;">
+  <section id="selbsttest" style="background:#FAF9F6; padding:100px 32px; scroll-margin-top:20px;">
     <div style="max-width:1200px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fit,minmax(340px,1fr)); gap:48px; align-items:center;">
       <div>
         <div style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:12px; letter-spacing:0.14em; color:#DD7E2E; margin-bottom:18px;">KOSTENLOSER SELBSTTEST</div>
@@ -158,17 +159,52 @@
         </div>
       </div>
       <div style="background:#fff; border-radius:20px; padding:36px; box-shadow:0 20px 50px rgba(36,52,74,0.12);">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; font-family:'Montserrat',sans-serif; font-size:12px; color:#9CA9B6;">
-          <span>FRAGE 1 VON 5</span><span>Quiz</span>
+
+        <!-- Screen 1: Fragen -->
+        <div id="st-quiz">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; font-family:'Montserrat',sans-serif; font-size:12px; color:#9CA9B6;">
+            <span id="st-progress-label">FRAGE 1 VON 5</span><span>Selbsttest</span>
+          </div>
+          <div style="height:4px; background:#F0E4D3; border-radius:99px; margin-bottom:26px;"><div id="st-progress-bar" style="width:20%; height:100%; background:#DD7E2E; border-radius:99px; transition:width .3s;"></div></div>
+          <p id="st-question" style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:19px; color:#6B2F7A; margin:0 0 22px; min-height:56px;">…</p>
+          <div id="st-options" style="display:flex; flex-direction:column; gap:12px;"></div>
+          <button type="button" id="st-back" style="display:none; margin-top:18px; background:none; border:none; color:#8FA0AF; font-family:'Montserrat',sans-serif; font-size:13px; cursor:pointer;">← Vorherige Frage</button>
         </div>
-        <div style="height:4px; background:#F0E4D3; border-radius:99px; margin-bottom:26px;"><div style="width:20%; height:100%; background:#DD7E2E; border-radius:99px;"></div></div>
-        <p style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:19px; color:#6B2F7A; margin:0 0 22px;">Ich habe oft das Gefühl, in meinem Leben nur zu funktionieren.</p>
-        <div style="display:flex; flex-direction:column; gap:12px; font-family:'Montserrat',sans-serif; font-size:15px; color:#3E4C5A;">
-          <div style="border:1px solid #E4D9C8; border-radius:10px; padding:14px 18px;">Selten</div>
-          <div style="border:1px solid #E4D9C8; border-radius:10px; padding:14px 18px;">Manchmal</div>
-          <div style="border:1px solid #E4D9C8; border-radius:10px; padding:14px 18px;">Oft</div>
-          <div style="border:1px solid #E4D9C8; border-radius:10px; padding:14px 18px;">Fast immer</div>
+
+        <!-- Screen 2: Kontaktdaten -->
+        <form id="st-form" method="POST" action="selbsttest.php" style="display:none;">
+          <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none;"/>
+          <input type="hidden" name="punkte" id="st-f-punkte"/>
+          <input type="hidden" name="ergebnis_titel" id="st-f-titel"/>
+          <input type="hidden" name="ergebnis_text" id="st-f-text"/>
+          <input type="hidden" name="antworten" id="st-f-antworten"/>
+          <div style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:12px; letter-spacing:0.1em; color:#DD7E2E; margin-bottom:10px;">FAST GESCHAFFT</div>
+          <p style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:19px; color:#6B2F7A; margin:0 0 8px;">Wohin darf ich dein Ergebnis senden?</p>
+          <p style="font-size:14px; line-height:1.6; color:#5C6B7A; margin:0 0 20px;">Du erhältst deine persönliche Auswertung mit einem Impuls für deinen nächsten Schritt direkt in dein Postfach.</p>
+          <input type="text" name="name" required placeholder="Dein Vorname" style="width:100%; box-sizing:border-box; padding:14px 16px; border-radius:10px; border:1px solid #E4D9C8; font-family:'Lora',serif; font-size:15px; margin-bottom:14px;"/>
+          <input type="email" name="email" required placeholder="Deine E-Mail-Adresse" style="width:100%; box-sizing:border-box; padding:14px 16px; border-radius:10px; border:1px solid #E4D9C8; font-family:'Lora',serif; font-size:15px; margin-bottom:16px;"/>
+          <label style="display:flex; align-items:flex-start; gap:10px; font-family:'Montserrat',sans-serif; font-size:12.5px; line-height:1.5; color:#5C6B7A; margin-bottom:20px;">
+            <input type="checkbox" name="datenschutz" required style="margin-top:2px; flex-shrink:0;"/>
+            <span>Ich habe die <a href="datenschutz.html">Datenschutzerklärung</a> gelesen und stimme der Verarbeitung meiner Daten zu.</span>
+          </label>
+          <button type="submit" id="st-submit" style="width:100%; background:#DD7E2E; color:#fff; border:none; padding:16px; border-radius:999px; font-family:'Montserrat',sans-serif; font-weight:700; font-size:15px; cursor:pointer;">Ergebnis anfordern</button>
+        </form>
+
+        <!-- Screen 3: Bestätigung & Einladung -->
+        <div id="st-done" style="display:none; text-align:center;">
+          <div style="width:60px; height:60px; border-radius:50%; background:#E9F1F1; color:#DD7E2E; display:flex; align-items:center; justify-content:center; margin:0 auto 20px;">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+          </div>
+          <p id="st-done-title" style="font-family:'Cormorant Garamond',serif; font-weight:800; font-size:24px; color:#6B2F7A; margin:0 0 12px;">Geschafft!</p>
+          <p style="font-size:15px; line-height:1.7; color:#5C6B7A; margin:0 0 8px;">Dein persönliches Ergebnis ist unterwegs an<br><strong id="st-done-email" style="color:#3E4C5A;"></strong></p>
+          <p style="font-size:13.5px; line-height:1.6; color:#8FA0AF; margin:0 0 24px;">Schau gern auch in deinen Spam-Ordner, falls die Mail nicht gleich erscheint.</p>
+          <div style="background:#F2EDE4; border-radius:14px; padding:22px; margin-bottom:22px; text-align:left;">
+            <div style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:13px; color:#DD7E2E; margin-bottom:8px;">MEINE EINLADUNG AN DICH</div>
+            <p style="font-size:14px; line-height:1.65; color:#5C6B7A; margin:0;">Ich lade dich herzlich zu meinem kostenfreien Online-Event „Ein Abend für dein Herz“ ein – ein sanfter Raum zum Ankommen bei dir.</p>
+          </div>
+          <a href="kostenfreies-event.html" style="display:inline-block; background:#DD7E2E; color:#fff; padding:15px 28px; border-radius:999px; font-family:'Montserrat',sans-serif; font-weight:700; font-size:15px; text-decoration:none;">Zum kostenfreien Event anmelden</a>
         </div>
+
       </div>
     </div>
   </section>
@@ -268,5 +304,114 @@
   </footer>
 
 </div>
+
+<script>
+(function () {
+  var questions = [
+    "Ich habe oft das Gefühl, meinen Körper nicht richtig zu spüren und nur noch zu funktionieren.",
+    "Ich sehne mich nach mehr Tiefe und Sinn, als mein Alltag mir gerade bietet.",
+    "Ich merke, wie ich den Kontakt zu mir selbst verliere – zu dem, was ich wirklich fühle.",
+    "Ich spüre bereits, dass sich etwas in mir verändert, auch wenn ich noch nicht genau weiß, wohin.",
+    "Ich bin bereit, alte Muster loszulassen, auch wenn das unbequem ist."
+  ];
+  var options = [
+    { label: "Selten", value: 1 },
+    { label: "Manchmal", value: 2 },
+    { label: "Oft", value: 3 },
+    { label: "Fast immer", value: 4 }
+  ];
+  var results = [
+    { min: 5, max: 9, titel: "Du ruhst gut in dir.", text: "Du scheinst momentan gut mit dir verbunden zu sein. Vielleicht spürst du hier und da eine leise Sehnsucht nach mehr Tiefe – nimm sie als sanften Wegweiser und bleib achtsam für die feinen Signale deiner Seele." },
+    { min: 10, max: 15, titel: "Du spürst eine leise Sehnsucht nach mehr.", text: "Etwas in dir ist in Bewegung. Du ahnst, dass mehr Tiefe, Klarheit und Verbindung zu dir selbst möglich sind. Genau hier setzt meine Arbeit an – behutsam und in deinem Tempo." },
+    { min: 16, max: 20, titel: "Du stehst an einem kraftvollen Wendepunkt.", text: "Du spürst deutlich, dass sich etwas wandeln möchte. Das ist keine Schwäche, sondern ein Ruf nach Wachstum. Gemeinsam können wir diesen Weg der Wandlung behutsam gehen – Schritt für Schritt zurück zu dir." }
+  ];
+
+  var answers = new Array(questions.length).fill(0);
+  var current = 0;
+
+  var elQuiz = document.getElementById('st-quiz');
+  var elForm = document.getElementById('st-form');
+  var elDone = document.getElementById('st-done');
+  var elLabel = document.getElementById('st-progress-label');
+  var elBar = document.getElementById('st-progress-bar');
+  var elQ = document.getElementById('st-question');
+  var elOpts = document.getElementById('st-options');
+  var elBack = document.getElementById('st-back');
+  if (!elQuiz) { return; }
+
+  function render() {
+    elLabel.textContent = 'FRAGE ' + (current + 1) + ' VON ' + questions.length;
+    elBar.style.width = Math.round((current + 1) / questions.length * 100) + '%';
+    elQ.textContent = questions[current];
+    elOpts.innerHTML = '';
+    options.forEach(function (opt) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'quiz-option';
+      b.textContent = opt.label;
+      b.setAttribute('style', "text-align:left; width:100%; border:1px solid #E4D9C8; border-radius:10px; padding:14px 18px; background:#fff; font-family:'Montserrat',sans-serif; font-size:15px; color:#3E4C5A; cursor:pointer; transition:all .15s;");
+      if (answers[current] === opt.value) { b.style.borderColor = '#DD7E2E'; b.style.background = '#FDF6EE'; }
+      b.addEventListener('click', function () {
+        answers[current] = opt.value;
+        if (current < questions.length - 1) { current++; render(); }
+        else { showForm(); }
+      });
+      elOpts.appendChild(b);
+    });
+    elBack.style.display = current > 0 ? 'inline-block' : 'none';
+  }
+
+  elBack.addEventListener('click', function () { if (current > 0) { current--; render(); } });
+
+  function score() { return answers.reduce(function (a, b) { return a + b; }, 0); }
+  function resultFor(s) {
+    for (var i = 0; i < results.length; i++) { if (s >= results[i].min && s <= results[i].max) { return results[i]; } }
+    return results[results.length - 1];
+  }
+
+  function showForm() {
+    var s = score();
+    var r = resultFor(s);
+    document.getElementById('st-f-punkte').value = s;
+    document.getElementById('st-f-titel').value = r.titel;
+    document.getElementById('st-f-text').value = r.text;
+    var lines = questions.map(function (q, i) {
+      var lab = options.filter(function (o) { return o.value === answers[i]; })[0];
+      return (i + 1) + '. ' + q + ' → ' + (lab ? lab.label : '-');
+    }).join('\n');
+    document.getElementById('st-f-antworten').value = lines;
+    elQuiz.style.display = 'none';
+    elForm.style.display = 'block';
+  }
+
+  var errBox = null;
+  elForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var btn = document.getElementById('st-submit');
+    btn.disabled = true; btn.textContent = 'Wird gesendet …';
+    if (errBox) { errBox.parentNode.removeChild(errBox); errBox = null; }
+    var data = new FormData(elForm);
+    fetch('selbsttest.php', { method: 'POST', body: data })
+      .then(function (res) { return res.ok ? res : Promise.reject(); })
+      .then(function () {
+        document.getElementById('st-done-email').textContent = String(data.get('email') || '');
+        var t = document.getElementById('st-done-title');
+        if (t) { t.textContent = resultFor(score()).titel; }
+        elForm.style.display = 'none';
+        elDone.style.display = 'block';
+      })
+      .catch(function () {
+        btn.disabled = false; btn.textContent = 'Ergebnis anfordern';
+        errBox = document.createElement('p');
+        errBox.setAttribute('style', "font-family:'Montserrat',sans-serif; font-size:13px; color:#B3611E; margin:14px 0 0;");
+        errBox.textContent = 'Das hat leider nicht geklappt. Bitte versuche es erneut oder schreibe an kirsten@kirstenernst.com.';
+        elForm.appendChild(errBox);
+      });
+  });
+
+  render();
+})();
+</script>
+
 </body>
 </html>
